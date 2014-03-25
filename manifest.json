@@ -1,0 +1,18 @@
+{
+    "manifest_version":2,
+    "name": "Ban Facebook",
+    "description": "",
+    "version": "1.0",
+    "permissions": [
+        "webRequest", 
+        "webRequestBlocking",
+        "*://*.facebook.com/*"
+    ],
+    "background": {
+        "scripts": ["bg.js"],
+        "persistent": true
+    },
+    "browser_action": {
+        "default_icon": "image/icon_app.png"
+    }    
+}

@@ -1,0 +1,22 @@
+<!doctype html>
+<html>
+  <head>
+<script>
+chrome.webRequest.onBeforeRequest.addListener(
+  function(details) {
+    console.log('shitttttttttttttttttttttttttttttt');
+    //if (details.url == "http://www.mozilla.org/") {
+    //  return {redirectUrl: "https://www.google.com/chrome/"};
+    // };
+  },
+  {
+    urls: ["*://www.mozilla.org/*"],
+    types: ["main_frame"]
+  },
+  ["blocking"]
+);
+</script>
+  </head>
+  <body>
+  </body>
+</html>

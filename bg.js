@@ -24,6 +24,8 @@ function rejectRequest() {
 }
 
 // prevent user delete the localstorage
+// and even if user changes computer but user still uses chrome.
+// it will be blocked.
 function initType() {
     chrome.storage.sync.get({
         limitation_type: 'type_all',

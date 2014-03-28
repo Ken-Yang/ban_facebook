@@ -1,6 +1,11 @@
 chrome.webRequest.onBeforeRequest.addListener(
     function(details) {
-        return {redirectUrl: "https://www.google.com"};
+		setBadgeText();
+		console.log(type);
+		getType();
+		if (type=='type_all') {
+			return rejectRequest();
+		}
     },
     {
         urls: ["*://*.facebook.com/*"],
@@ -8,3 +13,49 @@ chrome.webRequest.onBeforeRequest.addListener(
     },
     ["blocking"]
 );
+
+var type;
+chrome.browserAction.setBadgeBackgroundColor({color: [0, 24, 208, 255]});
+setBadgeText();
+initType();
+
+function rejectRequest() {
+	return {redirectUrl: "https://www.google.com"};
+}
+
+// prevent user delete the localstorage
+function initType() {
+    chrome.storage.sync.get({
+        limitation_type: 'type_all',
+        limitation_date: 'null'
+    }, function(item) {
+		localStorage.setItem('limitation_date',item.limitation_date);
+		localStorage.setItem('limitation_type',item.limitation_type);
+    });
+}
+
+function getType() {
+	type = localStorage.getItem('limitation_type');
+}
+
+function setBadgeText() {
+	var count = 0;
+	if (localStorage.getItem('access_count')) {
+		count = localStorage.getItem('access_count');
+		count++;
+	} else {
+		count++;
+	}
+	localStorage.setItem('access_count',count);
+	chrome.browserAction.setBadgeText({text: count.toString() });
+}
+
+chrome.storage.onChanged.addListener(function(changes, namespace) {
+	for (key in changes) {
+		var storageChange = changes[key];
+		if (key == 'limitation_type') {
+			type = storageChange.newValue;
+		}
+		localStorage.setItem(key,storageChange.newValue);
+	}
+});

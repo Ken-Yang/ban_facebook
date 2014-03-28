@@ -1,0 +1,123 @@
+<!doctype html>
+<html>
+  <head>
+    <link rel="stylesheet" href="/css/bootstrap/bootstrap.min.css">
+    <link rel="stylesheet" href="/css/bootstrap/bootstrap-theme.min.css">
+
+    <style>
+        body{
+            margin: 10px 10px auto;
+            width: 100%;
+            text-align:center;
+            min-width: 600px;
+        }
+        button.link_btn{
+            width: 100px;
+            height: 30px;
+        }
+        div{
+            min-height: 30px;
+        }
+        div.column{
+            width:450px;
+            margin:0px auto;
+            text-align:left;
+            min-height: 30px;
+        }
+        #err_msg{
+            display: none;
+            color: red;
+        }
+        #confirm, #cancel {
+            display: none;
+        }
+        blockquote {
+            text-align: left;
+        }
+        blockquote#warning{
+            background-color: #fcf8f2;
+            border-color: #f0ad4e;
+        }
+        #warning h4{
+            color: #f0ad4e;
+        }
+
+        blockquote#error_msg{
+            display: none;
+            background-color: #F9F2F4;
+            border-color: #C7254E;
+        }
+        #error_msg h4{
+            color: #C7254E;
+        }
+
+        blockquote#success_msg{
+            display: none;
+            background-color: #F4F8FA;
+            border-color: #81C3DF;
+        }
+        #success_msg h4{
+            color: #81C3DF;
+        }
+
+    </style>
+    <script src="popup.js"></script>
+  </head>
+  <body>
+
+    <blockquote id="success_msg">
+        <h4>Success!</h4>
+        <p>Now you can't access facebook.</p>
+    </blockquote>
+    <div id="content" class="lead">
+
+        <h3 class="page-header" style="text-align: left">Select the following item as your facebook limitation.</h3>
+
+        <blockquote id="warning">
+            <h4>Warning!</h4>
+            <p>Once you save the setting, you can't change it until tomorrow.</p>
+        </blockquote>
+
+
+        <div class="column">
+            <h4>You can't use facebook.....</h4>
+        </div>
+        <div class="column">
+            <input id="type_all" type="radio" name="type" checked/>
+            <code>All Day</code>.
+        </div>
+        <div class="column">
+            <input id="type_range" type="radio" name="type" />
+            <code>From</code>:
+            <select name="from" id="from" disabled="true"></select>&nbsp;
+            <code>To</code>:
+            <select name="to" id="to" disabled="true"></select>&nbsp;
+        </div>
+        <div class="column">
+            <input id="type_after" type="radio" name="type" />
+            <code>After </code>
+            <select name="after" id="after" disabled="true"></select>&nbsp;
+        </div>
+        <div class="column">
+            <input id="type_before" type="radio" name="type" />
+            <code>Before</code>
+            <select name="before" id="before" disabled="true"></select>&nbsp;
+        </div>
+
+        <div>
+            <button class="btn btn-success" id="save">Save</button>
+            <button class="btn btn-primary" id="confirm">Confirm</button>
+            <button class="btn btn-danger" id="cancel">Cancel</button>
+        </div>
+
+    </div>
+
+    <button class="btn btn-danger" id="clear">Clear</button>
+
+    <blockquote id="error_msg">
+        <h4>Warning!</h4>
+        <p>You've already set up the settings. You can't change the settings until tomorrow.</p>
+    </blockquote>
+
+  </body>
+</html>

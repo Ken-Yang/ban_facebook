@@ -28,8 +28,8 @@ function rejectRequest() {
 // it will be blocked.
 function initType() {
     chrome.storage.sync.get({
-        limitation_type: 'type_all',
-        limitation_date: 'null'
+        limitation_type: '',
+        limitation_date: ''
     }, function(item) {
 		localStorage.setItem('limitation_date',item.limitation_date);
 		localStorage.setItem('limitation_type',item.limitation_type);

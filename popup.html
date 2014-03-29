@@ -32,6 +32,7 @@
             display: none;
         }
         blockquote {
+            display: none;
             text-align: left;
         }
         blockquote#warning{
@@ -73,12 +74,6 @@
 
         <h3 class="page-header" style="text-align: left">Select the following item as your facebook limitation.</h3>
 
-        <blockquote id="warning">
-            <h4>Warning!</h4>
-            <p>Once you save the setting, you can't change it until tomorrow.</p>
-        </blockquote>
-
-
         <div class="column">
             <h4>You can't use facebook.....</h4>
         </div>
@@ -104,6 +99,11 @@
             <select name="before" id="before" disabled="true"></select>&nbsp;
         </div>
 
+        <blockquote id="warning">
+            <h4>Warning!</h4>
+            <p>Once you save the setting, you can't change it until tomorrow.</p>
+        </blockquote>
+
         <div>
             <button class="btn btn-success" id="save">Save</button>
             <button class="btn btn-primary" id="confirm">Confirm</button>
@@ -112,7 +112,8 @@
 
     </div>
 
-    <button class="btn btn-danger" id="clear">Clear</button>
+    <button class="btn btn-danger" style="display: nones" id="clear">Clear</button>
+
 
     <blockquote id="error_msg">
         <h4>Warning!</h4>

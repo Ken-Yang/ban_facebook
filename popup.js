@@ -11,6 +11,10 @@ var btnSave;
 var btnConfirm;
 var btnCancel;
 
+var msgWarning;
+var msgSuccess;
+var msgError;
+
 d.addEventListener('DOMContentLoaded', function () {
     // init 
     appendChild('from');
@@ -23,14 +27,18 @@ d.addEventListener('DOMContentLoaded', function () {
     addEventListener('type_after');
     addEventListener('type_before');
 
-    selectFrom  = d.getElementById('from');
-    selectTo    = d.getElementById('to');
-    selectAfter = d.getElementById('after');
-    selectBefore= d.getElementById('before');
+    msgWarning = $('warning');
+    msgSuccess = $('success_msg');
+    msgError = $('error_msg');
 
-    btnSave = d.getElementById('save');
-    btnConfirm = d.getElementById('confirm');
-    btnCancel = d.getElementById('cancel');
+    selectFrom  = $('from');
+    selectTo    = $('to');
+    selectAfter = $('after');
+    selectBefore= $('before');
+    btnSave = $('save');
+    btnConfirm = $('confirm');
+    btnCancel = $('cancel');
+
     btnSave.addEventListener('click', function(){confirm();},false);
     btnConfirm.addEventListener('click', function(){save();},false);
     btnCancel.addEventListener('click', function(){cancel();},false);
@@ -43,8 +51,8 @@ d.addEventListener('DOMContentLoaded', function () {
     }, function(item) {
         type = item.limitation_type;
         if ( new Date().getDate() == item.limitation_date) {
-          d.getElementById('error_msg').style.display='block';
-          d.getElementById('content').style.display='none';
+          msgError.style.display='block';
+          $('content').style.display='none';
         }
     });
 });
@@ -54,13 +62,19 @@ function addEventListener(id) {
     obj.addEventListener('click', function(e){radioClicked(e);},false);
 }
 
+function $(id){
+  return d.getElementById(id);
+}
+
 function confirm() {
+  msgWarning.style.display='block';
   btnSave.style.display = 'none'; 
   btnConfirm.style.display = 'inline-block'; 
   btnCancel.style.display = 'inline-block'; 
 }
 
 function cancel() {
+  msgWarning.style.display='none';
   btnSave.style.display = 'inline-block'; 
   btnConfirm.style.display = 'none'; 
   btnCancel.style.display = 'none'; 
@@ -71,11 +85,12 @@ function save() {
       limitation_type: type,
       limitation_date: new Date().getDate()
     }, function() {
-        d.getElementById('success_msg').style.display='block'
-        d.getElementById('content').style.display='none';;
+        msgWarning.style.display='none';
+        msgSuccess.style.display='block'
+        $('content').style.display='none';;
         btnConfirm.style.display = 'none'; 
         btnCancel.style.display = 'none'; 
-        d.getElementById('save').disabled = true;
+        btnSave.disabled = true;
         console.log('save success');  
   });
 
@@ -111,11 +126,11 @@ function disableElement(e) { e.disabled = true; }
 function enableElement(e) { e.disabled = false; }
 
 function appendChild(id){
-    var select = d.getElementById(id);
+    var select = $(id);
     select.innerHTML='';
     var start = 0;
     if (id == 'to') {
-      start  = parseInt(d.getElementById('from').value)+1;
+      start  = parseInt($('from').value)+1;
       console.log(start);
     }
     for (var i=start; i<24; i++) {

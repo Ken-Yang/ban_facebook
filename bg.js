@@ -15,7 +15,7 @@ chrome.webRequest.onBeforeRequest.addListener(
 );
 
 var type;
-chrome.browserAction.setBadgeBackgroundColor({color: [0, 24, 208, 255]});
+chrome.browserAction.setBadgeBackgroundColor({color: "#3299e8"});
 setBadgeText();
 initType();
 
@@ -58,6 +58,7 @@ chrome.storage.onChanged.addListener(function(changes, namespace) {
 		if (key == 'limitation_type') {
 			type = storageChange.newValue;
 		}
+		console.log('onChanged');
 		localStorage.setItem(key,storageChange.newValue);
 	}
 });

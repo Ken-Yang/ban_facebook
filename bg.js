@@ -1,14 +1,13 @@
 chrome.webRequest.onBeforeRequest.addListener(
     function(details) {
 		setBadgeText();
-		console.log(type);
 		getType();
 		if (type=='type_all') {
 			return rejectRequest();
 		}
     },
     {
-        urls: ["*://*.facebook.com/*"],
+        urls: ["https://*.facebook.com/*"],
         types: ["main_frame"]
     },
     ["blocking"]

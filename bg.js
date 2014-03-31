@@ -2,22 +2,9 @@ chrome.webRequest.onBeforeRequest.addListener(
     function(details) {
 		setAccessCount();
 		setBadgeText();
-		type = getType();
-		var date = new Date();
-		var bReject = false;
-		if (type == 'type_all') {
-			bReject = true;
-		} else if (getDate() == date.getDate()) {
-			if (type=='type_range') {
-			} else if (type=='type_after' && getHour() <= date.getHours()) {
-				bReject = true;
-			} else if (type=='type_before' && getHour() > date.getHours()) {
-				bReject = true;
-			}
-		}
 
-		if (bReject) {
-			return rejectRequest();
+		if (!canAccess()) {
+			return {redirectUrl: "https://www.google.com"};
 		}
 
     },
@@ -45,8 +32,59 @@ chrome.browserAction.setBadgeBackgroundColor({color: "#3299e8"});
 setBadgeText();
 initType();
 
-function rejectRequest() {
-	return {redirectUrl: "https://www.google.com"};
+
+function canAccess() {
+	type = getType();
+	var limitationDate = getDate();
+	var limitationHour = getHour();
+	var limitationFrom = getFrom();
+	var limitationTo   = getTo();
+
+	var date = new Date();
+	var nowHours = date.getHours();
+	var nowMin 	= date.getMinutes();
+
+	if (limitationDate != date.getDate()) {
+		return true;
+	}
+
+
+	if (type == 'type_all') {
+		return false;
+	} else if (type=='type_range' && limitationFrom<=nowHours && (limitationTo>nowHours || (limitationTo==nowHours && nowMin==0)) ) {
+		return false;
+	} else if (type=='type_after' && limitationHour <= nowHours) {
+		return false;
+	} else if (type=='type_before' && (limitationHour > nowHours || (limitationHour == nowHours && nowMin==0)  )) {
+		return false;
+	} else {
+		return true;
+	}
+}
+
+// can modify setting
+function canModify() {
+	var limitationDate = getDate();
+	var limitationHour = getHour();
+	var limitationFrom = getFrom();
+	var limitationTo   = getTo();
+
+	var date = new Date();
+	var nowHours = date.getHours();
+	var nowMin 	= date.getMinutes();
+
+	if (limitationDate != date.getDate()) {
+		return true;
+	}
+
+	if (type=='type_range' && (limitationFrom<nowHours || limitationTo<nowHours )) {
+		return true;
+	} else if (type=='type_before' && limitationHour < nowHours) {
+		return true;
+	}
+
+	return false;
+
 }
 
 // prevent user delete the localstorage
@@ -56,11 +94,15 @@ function initType() {
     chrome.storage.sync.get({
         limitation_type: '',
         limitation_date: '',
-        limitation_hour: ''
+        limitation_hour: '',
+        limitation_to: '',
+        limitation_from: ''
     }, function(item) {
 		localStorage.setItem('limitation_date',item.limitation_date);
 		localStorage.setItem('limitation_type',item.limitation_type);
 		localStorage.setItem('limitation_hour',item.limitation_hour);
+		localStorage.setItem('limitation_from',item.limitation_from);
+		localStorage.setItem('limitation_to',item.limitation_to);
     });
 }
 
@@ -73,12 +115,21 @@ function getDate() {
 }
 
 function getHour() {
-	return (localStorage.getItem('limitation_hour')) ? localStorage.getItem('limitation_hour') : '';
+	return (localStorage.getItem('limitation_hour')) ? localStorage.getItem('limitation_hour') : 0;
 }
 
 function getAccessCount() {
 	return (localStorage.getItem('access_count')) ? localStorage.getItem('access_count') : 0;
 }
+
+function getFrom() {
+	return (localStorage.getItem('limitation_from')) ? localStorage.getItem('limitation_from') : 0;
+}
+
+function getTo() {
+	return (localStorage.getItem('limitation_to')) ? localStorage.getItem('limitation_to') : 0;
+}
+
 
 function setBadgeText() {
 	var count = getAccessCount();
@@ -96,6 +147,5 @@ chrome.storage.onChanged.addListener(function(changes, namespace) {
 	for (key in changes) {
 		var storageChange = changes[key];
 		localStorage.setItem(key,storageChange.newValue);
-		console.log(key);
 	}
 });

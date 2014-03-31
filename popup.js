@@ -4,17 +4,12 @@ var selectFrom;
 var selectTo;
 var selectAfter;
 var selectBefore;
-var type;
-var hour;
-var count;
-var LIMITATION = 'limitation_type';
+var type = 'type_all';
 var btnSave;
 var btnConfirm;
 var btnCancel;
 
 var msgWarning;
-var msgSuccess;
-var msgError;
 
 d.addEventListener('DOMContentLoaded', function () {
     // init 
@@ -29,8 +24,6 @@ d.addEventListener('DOMContentLoaded', function () {
     addEventListener('type_before');
 
     msgWarning = $('warning_confirm');
-    msgSuccess = $('success_msg');
-    msgError   = $('error_msg');
 
     selectFrom  = $('from');
     selectTo    = $('to');
@@ -49,16 +42,11 @@ d.addEventListener('DOMContentLoaded', function () {
     selectFrom.addEventListener('change', function(){appendChild('to');},false);
     $('clear').addEventListener('click', function(){ localStorage.clear();chrome.storage.sync.clear();},false);
 
-    chrome.storage.sync.get({
-        limitation_type: 'type_all',
-        limitation_date: 'null'
-    }, function(item) {
-        type = item.limitation_type;
-        if ( new Date().getDate() == item.limitation_date) {
-          msgError.style.display='block';
-          $('content').style.display='none';
-        }
-    });
+    if (!chrome.extension.getBackgroundPage().canModify()) {
+        $('error_msg').style.display='block';
+        $('content').style.display='none';
+        $('error_msg_content').innerHTML = 'You\'ve already set up the settings. You can\'t access to Facebook ' ;
+    }
 });
 
 function addEventListener(id) {
@@ -86,7 +74,13 @@ function cancel() {
 }
 
 function save() {
+    var hour = -1;
+    var from = -1;
+    var to   = -1;
+
     if (type == 'type_range') {
+        from = $('from').value;
+        to   = $('to').value;
     } else if (type == 'type_after') {
         hour = $('after').value;
     } else if (type == 'type_before') {
@@ -96,10 +90,12 @@ function save() {
     chrome.storage.sync.set({
         limitation_type: type,
         limitation_date: new Date().getDate(),
-        limitation_hour: hour
+        limitation_hour: hour,
+        limitation_from: from,
+        limitation_to: to
       }, function() {
           msgWarning.style.display='none';
-          msgSuccess.style.display='block'
+          $('success_msg').style.display='block'
           $('content').style.display='none';;
           btnConfirm.style.display = 'none'; 
           btnCancel.style.display = 'none'; 
@@ -141,7 +137,7 @@ function enableElement(e) { e.disabled = false; }
 function appendChild(id){
     var select = $(id);
     select.innerHTML='';
-    var start = 0;
+    var start = new Date().getHours();
     if (id == 'to') {
       start  = parseInt($('from').value)+1;
     }

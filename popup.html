@@ -7,7 +7,6 @@
     <style>
         body{
             margin: 10px 10px auto;
-            width: 100%;
             text-align:center;
             min-width: 600px;
         }
@@ -35,29 +34,29 @@
             display: none;
             text-align: left;
         }
-        blockquote#warning{
+        blockquote.warning{
             background-color: #fcf8f2;
             border-color: #f0ad4e;
         }
-        #warning h4{
+        .warning h4{
             color: #f0ad4e;
         }
 
-        blockquote#error_msg{
+        blockquote.error{
             display: none;
             background-color: #F9F2F4;
             border-color: #C7254E;
         }
-        #error_msg h4{
+        .error h4{
             color: #C7254E;
         }
 
-        blockquote#success_msg{
+        blockquote.success{
             display: none;
             background-color: #F4F8FA;
             border-color: #81C3DF;
         }
-        #success_msg h4{
+        .success h4{
             color: #81C3DF;
         }
 
@@ -66,16 +65,22 @@
   </head>
   <body>
 
-    <blockquote id="success_msg">
+    <blockquote id="success_msg" class="success">
         <h4>Success!</h4>
         <p>Now you can't access facebook.</p>
     </blockquote>
-    <div id="content" class="lead">
 
-        <h3 class="page-header" style="text-align: left">Select the following item as your facebook limitation.</h3>
+    <div id="content" class="lead ">
+
+        <h3 class="page-header" style="text-align: left">Select the following item as your Facebook limitation.</h3>
+
+        <blockquote class="warning" style="display: block">
+            <h4>Warning!</h4>
+            <p>You have access to Facebook <code id="access_count">2000</code> times. Maybe you should save this time to do something more meaningful.</p>
+        </blockquote>
 
         <div class="column">
-            <h4>You can't use facebook.....</h4>
+            <h4>You can't use Facebook.....</h4>
         </div>
         <div class="column">
             <input id="type_all" type="radio" name="type" checked/>
@@ -99,7 +104,7 @@
             <select name="before" id="before" disabled="true"></select>&nbsp;
         </div>
 
-        <blockquote id="warning">
+        <blockquote id="warning_confirm"  class="warning">
             <h4>Warning!</h4>
             <p>Once you save the setting, you can't change it until tomorrow.</p>
         </blockquote>
@@ -112,10 +117,10 @@
 
     </div>
 
-    <button class="btn btn-danger" style="display: nones" id="clear">Clear</button>
+    <button class="btn btn-danger" style="display: none" id="clear">Clear</button>
 
 
-    <blockquote id="error_msg">
+    <blockquote id="error_msg" class="error">
         <h4>Warning!</h4>
         <p>You've already set up the settings. You can't change the settings until tomorrow.</p>
     </blockquote>

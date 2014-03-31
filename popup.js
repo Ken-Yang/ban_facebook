@@ -5,6 +5,7 @@ var selectTo;
 var selectAfter;
 var selectBefore;
 var type;
+var hour;
 var count;
 var LIMITATION = 'limitation_type';
 var btnSave;
@@ -27,23 +28,26 @@ d.addEventListener('DOMContentLoaded', function () {
     addEventListener('type_after');
     addEventListener('type_before');
 
-    msgWarning = $('warning');
+    msgWarning = $('warning_confirm');
     msgSuccess = $('success_msg');
-    msgError = $('error_msg');
+    msgError   = $('error_msg');
 
     selectFrom  = $('from');
     selectTo    = $('to');
     selectAfter = $('after');
     selectBefore= $('before');
-    btnSave = $('save');
-    btnConfirm = $('confirm');
-    btnCancel = $('cancel');
+    btnSave     = $('save');
+    btnConfirm  = $('confirm');
+    btnCancel   = $('cancel');
+
+    var count = chrome.extension.getBackgroundPage().getAccessCount();
+    $('access_count').innerHTML = count;
 
     btnSave.addEventListener('click', function(){confirm();},false);
     btnConfirm.addEventListener('click', function(){save();},false);
     btnCancel.addEventListener('click', function(){cancel();},false);
     selectFrom.addEventListener('change', function(){appendChild('to');},false);
-    d.getElementById('clear').addEventListener('click', function(){ localStorage.clear();chrome.storage.sync.clear();},false);
+    $('clear').addEventListener('click', function(){ localStorage.clear();chrome.storage.sync.clear();},false);
 
     chrome.storage.sync.get({
         limitation_type: 'type_all',
@@ -62,37 +66,46 @@ function addEventListener(id) {
     obj.addEventListener('click', function(e){radioClicked(e);},false);
 }
 
+
 function $(id){
-  return d.getElementById(id);
+    return d.getElementById(id);
 }
 
 function confirm() {
-  msgWarning.style.display='block';
-  btnSave.style.display = 'none'; 
-  btnConfirm.style.display = 'inline-block'; 
-  btnCancel.style.display = 'inline-block'; 
+    msgWarning.style.display='block';
+    btnSave.style.display = 'none'; 
+    btnConfirm.style.display = 'inline-block'; 
+    btnCancel.style.display = 'inline-block'; 
 }
 
 function cancel() {
-  msgWarning.style.display='none';
-  btnSave.style.display = 'inline-block'; 
-  btnConfirm.style.display = 'none'; 
-  btnCancel.style.display = 'none'; 
+    msgWarning.style.display='none';
+    btnSave.style.display = 'inline-block'; 
+    btnConfirm.style.display = 'none'; 
+    btnCancel.style.display = 'none'; 
 }
 
 function save() {
-  chrome.storage.sync.set({
-      limitation_type: type,
-      limitation_date: new Date().getDate()
-    }, function() {
-        msgWarning.style.display='none';
-        msgSuccess.style.display='block'
-        $('content').style.display='none';;
-        btnConfirm.style.display = 'none'; 
-        btnCancel.style.display = 'none'; 
-        btnSave.disabled = true;
-        console.log('save success');  
-  });
+    if (type == 'type_range') {
+    } else if (type == 'type_after') {
+        hour = $('after').value;
+    } else if (type == 'type_before') {
+        hour = $('before').value;
+    }
+
+    chrome.storage.sync.set({
+        limitation_type: type,
+        limitation_date: new Date().getDate(),
+        limitation_hour: hour
+      }, function() {
+          msgWarning.style.display='none';
+          msgSuccess.style.display='block'
+          $('content').style.display='none';;
+          btnConfirm.style.display = 'none'; 
+          btnCancel.style.display = 'none'; 
+          btnSave.disabled = true;
+          console.log('save success');  
+    });
 
 }
 
@@ -131,7 +144,6 @@ function appendChild(id){
     var start = 0;
     if (id == 'to') {
       start  = parseInt($('from').value)+1;
-      console.log(start);
     }
     for (var i=start; i<24; i++) {
       var option= d.createElement('option');

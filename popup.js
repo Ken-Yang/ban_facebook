@@ -45,7 +45,7 @@ d.addEventListener('DOMContentLoaded', function () {
     if (!chrome.extension.getBackgroundPage().canModify()) {
         $('error_msg').style.display='block';
         $('content').style.display='none';
-        $('error_msg_content').innerHTML = 'You\'ve already set up the setting. You can\'t access to Facebook ' + chrome.extension.getBackgroundPage().getErrorMsg();
+        $('error_msg_content').innerHTML = 'You\'ve already set up the limitation. You can\'t access to Facebook ' + chrome.extension.getBackgroundPage().getErrorMsg();
     }
 });
 

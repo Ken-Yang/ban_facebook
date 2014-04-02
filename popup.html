@@ -59,6 +59,9 @@
         .success h4{
             color: #81C3DF;
         }
+        .error code{
+            background-color: #EEEEEE;
+        }
 
     </style>
     <script src="popup.js"></script>
@@ -72,11 +75,11 @@
 
     <div id="content" class="lead ">
 
-        <h3 class="page-header" style="text-align: left">Select the following item as your Facebook limitation.</h3>
+        <h3 class="page-header" style="text-align: left">Select the following items as your Facebook limitation.</h3>
 
         <blockquote class="warning" style="display: block">
             <h4>Warning!</h4>
-            <p>You have access to Facebook <code id="access_count">2000</code> times. Maybe you should save this time to do something more meaningful.</p>
+            <p>You have access to Facebook <code id="access_count"></code> times. Maybe you should save time to do something more meaningful.</p>
         </blockquote>
 
         <div class="column">
@@ -117,7 +120,7 @@
 
     </div>
 
-    <button class="btn btn-danger" style="display: nones" id="clear">Clear</button>
+    <button class="btn btn-danger" style="display: none" id="clear">Clear</button>
 
 
     <blockquote id="error_msg" class="error">

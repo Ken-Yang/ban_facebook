@@ -27,14 +27,21 @@ chrome.tabs.onActivated.addListener(
 	}
 );
 
-var type;
+chrome.alarms.create('refresh', {periodInMinutes: 1});
+chrome.alarms.onAlarm.addListener(function(alarm){
+	var date = new Date();
+	if (date.getHours() == '0' && date.getMinutes() == '0') {
+		localStorage.clear();
+	}
+});
+
 chrome.browserAction.setBadgeBackgroundColor({color: "#3299e8"});
 setBadgeText();
 initType();
 
 
 function canAccess() {
-	type = getType();
+	var type = getType();
 	var limitationDate = getDate();
 	var limitationHour = getHour();
 	var limitationFrom = getFrom();
@@ -64,6 +71,7 @@ function canAccess() {
 
 // can modify setting
 function canModify() {
+	var type = getType();
 	var limitationDate = getDate();
 	var limitationHour = getHour();
 	var limitationFrom = getFrom();
@@ -77,7 +85,7 @@ function canModify() {
 		return true;
 	}
 
-	if (type=='type_range' && (limitationFrom<nowHours || limitationTo<nowHours )) {
+	if (type=='type_range' && limitationTo<nowHours ) {
 		return true;
 	} else if (type=='type_before' && limitationHour < nowHours) {
 		return true;
@@ -130,6 +138,23 @@ function getTo() {
 	return (localStorage.getItem('limitation_to')) ? localStorage.getItem('limitation_to') : 0;
 }
 
+function getErrorMsg() {
+	var type = getType();
+
+	if (type == 'type_all') {
+		return ' <code>All Day</code>';
+	} else if (type=='type_range') {
+		var limitationFrom = getFrom();
+		var limitationTo   = getTo();
+		return '<code>From: ' +  limitationFrom+ ':00 To:' + limitationTo+ ':00</code>';
+	} else if (type=='type_after' ) {
+		var limitationHour = getHour();
+		return '<code>After: ' + limitationHour + ':00</code>';
+	} else if (type=='type_before') {
+		var limitationHour = getHour();
+		return '<code>Before:' + limitationHour+ ':00</code>';
+	}
+}
 
 function setBadgeText() {
 	var count = getAccessCount();

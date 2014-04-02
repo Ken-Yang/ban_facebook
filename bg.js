@@ -19,7 +19,7 @@ chrome.tabs.onActivated.addListener(
 	function(activeInfo){
 		console.log(activeInfo.tabId);
 		chrome.tabs.get(activeInfo.tabId,function(tab){
-			if (tab.url.indexOf("facebook.com")!=-1) {
+			if (tab.url.match(/^https:\/\/\w+.facebook.com/)!=null) {
 				setAccessCount();
 				setBadgeText();
 			}

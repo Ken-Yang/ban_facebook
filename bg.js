@@ -29,8 +29,10 @@ chrome.tabs.onActivated.addListener(
 chrome.alarms.create('refresh', {periodInMinutes: 1});
 chrome.alarms.onAlarm.addListener(function(alarm){
 	var date = new Date();
-	if (date.getHours() == '0' && date.getMinutes() == '0') {
+	if (date.getDate() != localStorage.getItem('today') ) {
 		localStorage.clear();
+		localStorage.setItem('today',date.getDate());
+		setBadgeText();
 	}
 });
 
@@ -98,6 +100,8 @@ function canModify() {
 // and even if user changes computer but user still uses chrome.
 // it will be blocked.
 function initType() {
+    var date = new Date();
+    localStorage.setItem('today',date.getDate());
     chrome.storage.sync.get({
         limitation_type: '',
         limitation_date: '',

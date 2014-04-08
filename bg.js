@@ -86,7 +86,7 @@ function canModify() {
 		return true;
 	}
 
-	if (type=='type_range' && limitationTo<nowHours ) {
+	if (type=='type_range' && (limitationTo<nowHours || (limitationTo==nowHours && nowMin!=0)) ) {
 		return true;
 	} else if (type=='type_before' && limitationHour < nowHours) {
 		return true;

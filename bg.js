@@ -31,6 +31,7 @@ chrome.alarms.onAlarm.addListener(function(alarm){
 	var date = new Date();
 	if (date.getDate() != localStorage.getItem('today') ) {
 		localStorage.clear();
+		chrome.storage.sync.clear();
 		localStorage.setItem('today',date.getDate());
 		setBadgeText();
 	}
